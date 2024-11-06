@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
             spriteRenderer.flipX = false; // 오른쪽 방향
         }       
         else if (movement.x < 0)
-        {
+        {       
             spriteRenderer.flipX = true; // 왼쪽 방향
         }
            

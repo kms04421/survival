@@ -13,10 +13,11 @@ public class MapController : MonoBehaviour
     private Vector3Int playerGridPosition;// 현재 플레이어 그리드 좌표
     private Vector3Int lastPlayerGridPosition; // 이전 프레이임의 플레이어 그리드 좌표 
     private Queue<Transform> tileMaps;
-
+    private WaitForSeconds updateSecond;
     // Start is called before the first frame update
     void Start()
     {
+        updateSecond = new WaitForSeconds(0.2f);
         Transform tile = grid.transform.GetChild(0);
         tileMaps = new Queue<Transform>();
         tilemapSize = CalculateTileSize(tile.GetComponent<Tilemap>()); // 타일맵 크기 계산 함수 호출
@@ -34,6 +35,8 @@ public class MapController : MonoBehaviour
         lastPlayerGridPosition = playerGridPosition; //플레이어의 마지막 그리드 위치 좌표
 
         ActivateTilemapsAroundPlayer();
+        StartCoroutine("MapUpdate");
+
     }// 플레이어 주변 타일맵을 활성화
     void ActivateTilemapsAroundPlayer()//플레이어 주변위치에 타일 배치
     {
@@ -60,15 +63,19 @@ public class MapController : MonoBehaviour
             }
         }
     }
-    private void Update()
+    IEnumerator MapUpdate()
     {
-        playerGridPosition = GetGridPosition(player.position);//현재 플레이어의 위치
-
-        if(playerGridPosition != lastPlayerGridPosition)//플레이어가 이동할경우
+        while (true)
         {
-            ActivateTilemapsAroundPlayer();
-           // MoveTilemaps(playerGridPosition - lastPlayerGridPosition); //타일맵 이동
-            lastPlayerGridPosition = playerGridPosition; //이전위치 업데이트
+            playerGridPosition = GetGridPosition(player.position);//현재 플레이어의 위치
+
+            if (playerGridPosition != lastPlayerGridPosition)//플레이어가 이동할경우
+            {
+                ActivateTilemapsAroundPlayer();
+                // MoveTilemaps(playerGridPosition - lastPlayerGridPosition); //타일맵 이동
+                lastPlayerGridPosition = playerGridPosition; //이전위치 업데이트
+            }
+            yield return updateSecond;
         }
     }
     //월드 좌표를 그리드 좌표로 변환
