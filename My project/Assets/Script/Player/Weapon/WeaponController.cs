@@ -1,37 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-
-public class WeaponController : MonoBehaviour
+namespace MainSSM
 {
-    public float rotationAngle = 70f; // 회전할 각도
-    public float delay = 0.5f; // 회전 간격 (초)
-
-    private bool rotatingLeft = true; // 왼쪽, 오른쪽 회전 방향
-
-    private void Start()
+    public class WeaponController : MonoBehaviour
     {
-        StartCoroutine(RotateObject());
-    }
+        public float rotationAngle = 70f; // 회전할 각도
+        public float delay = 0.5f; // 회전 간격 (초)
 
-    IEnumerator RotateObject()
-    {
-        while (true)
+        private bool rotatingLeft = true; // 왼쪽, 오른쪽 회전 방향
+        private int Dam = 1;
+        private void Start()
         {
-            if (Player.ActionPlayer)
+            StartCoroutine(RotateObject());
+        }
+
+        IEnumerator RotateObject()
+        {
+            while (true)
             {
-                float targetAngle = rotatingLeft ? rotationAngle : -rotationAngle;
-                transform.rotation = Quaternion.Euler(0, 0, targetAngle);
+                if (Player.ActionPlayer)
+                {
+                    float targetAngle = rotatingLeft ? rotationAngle : -rotationAngle;
+                    transform.rotation = Quaternion.Euler(0, 0, targetAngle);
 
-                // 방향 전환
-                rotatingLeft = !rotatingLeft;
+                    // 방향 전환
+                    rotatingLeft = !rotatingLeft;
 
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Euler(0, 0, 70);
+                }
+                yield return new WaitForSeconds(delay);
             }
-            else
-            {            
-                transform.rotation = Quaternion.Euler(0, 0, 70);
+        }
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (!Player.ActionPlayer) return;
+            if(collision.gameObject.layer >= 6)
+            {
+                
+                collision.GetComponent<IHitListener>().OnHit(Dam);
             }
-            yield return new WaitForSeconds(delay);
         }
     }
 }
