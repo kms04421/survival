@@ -29,7 +29,6 @@ namespace MainSSM
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -41,7 +40,7 @@ namespace MainSSM
             MonsterQueue = new Queue<GameObject>();
             gameManager = GameManager.Instance;
             player = gameManager.PlayerPosition;
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 200; i++)
             {
                 GameObject go = Instantiate(monsterPrefab, gameObject.transform);
                 MonsterQueue.Enqueue(go);

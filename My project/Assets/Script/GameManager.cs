@@ -5,11 +5,13 @@ namespace MainSSM
     public class GameManager : MonoBehaviour
     {
         private static GameManager instance;      
-        public Transform PlayerPosition { get; private set; } // 
+        public Transform PlayerPosition { get; private set; } 
 
-        public RoundManager roundManager;
+        [HideInInspector]public RoundManager roundManager;
 
+        private UIManager UIManager;
         public int monstersKilled = 0;
+
         public static GameManager Instance
         {
 
@@ -35,17 +37,19 @@ namespace MainSSM
             {
                 Destroy(gameObject);
             }
+            UIManager = GetComponent<UIManager>();
             roundManager = new RoundManager();
             PlayerPosition = GameObject.Find("Player").transform;
             roundManager.SetRoundParameters();// 시작시 몬스터 수량을 위해 추가
 
         }
+
+       
         public void IncreaseMonstersKilled() // 몬스터 킬카운터 추가
         {
             monstersKilled++;
             if (monstersKilled == roundManager.EnemyCount)
-            {
-                roundManager.NextRound();
+            {                
                 monstersKilled = 0;
             }
         }

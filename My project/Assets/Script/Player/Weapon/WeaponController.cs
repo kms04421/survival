@@ -16,7 +16,7 @@ namespace MainSSM
             StartCoroutine(RotateObject());
         }
 
-        IEnumerator RotateObject()
+        private IEnumerator RotateObject()
         {
             while (true)
             {
@@ -39,11 +39,14 @@ namespace MainSSM
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!Player.ActionPlayer) return;
-            if(collision.gameObject.layer >= 6)
+            if(collision.gameObject.layer >= 7)
             {
                 
                 collision.GetComponent<IHitListener>().OnHit(Dam);
             }
         }
+       
     }
+
+
 }

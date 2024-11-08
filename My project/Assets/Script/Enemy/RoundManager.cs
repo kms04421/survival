@@ -11,6 +11,7 @@ public class RoundManager : MonoBehaviour
 
     private float hpMultiplier = 1.2f; // HP가 증가 비율
 
+    public int roundTime = 100; // 스테이지 시간
     public void SetRoundParameters()// 라운드별 몬스터 수량
     {
         EnemyCount = currentRound * 5; // 예: 라운드에 따라 적 수 증가

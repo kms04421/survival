@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5983755113476227530}
   - component: {fileID: 4251287353839373276}
   - component: {fileID: -7136215108194527957}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35aad5fa6146eff429c6c2984f97e77d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  die: 0
 --- !u!50 &4251287353839373276
 Rigidbody2D:
   serializedVersion: 5
@@ -210,7 +209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1166036477198805629}
   - component: {fileID: 4315313181769793398}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: pixil-frame-0 (7)_9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
