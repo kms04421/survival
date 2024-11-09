@@ -2,9 +2,8 @@ using UnityEngine;
 
 namespace MainSSM
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : SingletonBehaviour<GameManager>
     {
-        private static GameManager instance;      
         public Transform PlayerPosition { get; private set; } 
 
         [HideInInspector]public RoundManager roundManager;
@@ -12,31 +11,10 @@ namespace MainSSM
         private UIManager UIManager;
         public int monstersKilled = 0;
 
-        public static GameManager Instance
-        {
-
-            get
-            {
-                if (instance == null)
-                {
-                    return null;
-                }
-                return instance;
-            }
-
-        }
-
+    
         private void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+          
             UIManager = GetComponent<UIManager>();
             roundManager = new RoundManager();
             PlayerPosition = GameObject.Find("Player").transform;

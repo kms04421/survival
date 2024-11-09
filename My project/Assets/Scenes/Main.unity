@@ -1212,6 +1212,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7091589635486185325, guid: 8335bd2e35e11194ca8ae3a7b865159a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7091589635486185325, guid: 8335bd2e35e11194ca8ae3a7b865159a, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0.32006836
       objectReference: {fileID: 0}
@@ -3314,6 +3318,7 @@ GameObject:
   - component: {fileID: 2060688025}
   - component: {fileID: 2060688024}
   - component: {fileID: 2060688026}
+  - component: {fileID: 2060688027}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -3362,6 +3367,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 2060688023}
+  player: {fileID: 0}
+--- !u!114 &2060688027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060688023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ffd6ad2b8247a447b3d6ff1b771cf4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treePrefab: {fileID: 7106548726302983625, guid: 74e5466ad0277604c9f1f47b302198e8, type: 3}
+  rockPrefab: {fileID: 1751184179008449877, guid: 18ec87e2b40c6044d8cad805fd3ab097, type: 3}
+  spawnRadius: 50
+  objectsPerRegion: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

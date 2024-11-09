@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace MainSSM
 {
-    public class MonsterSpawner : MonoBehaviour
+    public class MonsterSpawner : SingletonBehaviour<MonsterSpawner>
     {
         private static MonsterSpawner instance; 
         public Transform player;    // 플레이어의 Transform
@@ -12,29 +12,8 @@ namespace MainSSM
         public float maxRadius = 15f;  // 최대 소환 범위
         private GameManager gameManager;//게임메니저 싱글톤 GameManager.Instance; 저장용
         private Queue<GameObject> MonsterQueue; //몬스터 프리팹 큐로 저장 오브젝트 풀링용 
-
-        public static MonsterSpawner Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    return null;
-                }
-                return instance;
-            }
-        }
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
+        
+      
         void Start()
         {
             MonsterQueue = new Queue<GameObject>();
