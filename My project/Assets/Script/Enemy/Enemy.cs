@@ -18,6 +18,7 @@ namespace MainSSM
         private Vector2 Speed; // 몬스터 스피드
         private float lastHitTime = 0f; // 마지막 피격 시간을 추적
         private float hitCooldown = 1f; // 1초 간격
+        [HideInInspector]public int spawnIndex = 0;
         private enum EnemyState
         {
             Chase,// 추적
@@ -119,7 +120,7 @@ namespace MainSSM
         {
             gameObject.SetActive(false);
             gamemanager.IncreaseMonstersKilled();
-            MonsterSpawner.Instance.EnqueueMonster(gameObject);
+            MonsterSpawner.Instance.EnqueueMonster(gameObject , spawnIndex);
         }
         IEnumerator WaitForKnockback() // 몬스터 경직
         {
@@ -133,7 +134,7 @@ namespace MainSSM
         }
         private void OnCollisionStay2D(Collision2D collision)
         {
-
+            if (currentState == EnemyState.Die) return;
             if (collision.collider.gameObject.layer == 6)
             {
                 if (Time.time - lastHitTime >= hitCooldown)
@@ -143,6 +144,9 @@ namespace MainSSM
                     // 마지막 피격 시간 갱신
                     lastHitTime = Time.time;
                 }
+            }else if (collision.collider.gameObject.layer != 7)
+            {
+                collision.gameObject.SetActive(false);
             }
         }
     }

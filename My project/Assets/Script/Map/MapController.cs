@@ -71,7 +71,7 @@ namespace MainSSM
                     tileMaps.Enqueue(tilemap);
                     activeGridPositions.Add(gridPos);
                    
-                    mapObjectSpawner.LoadObjectsNearPlayer(gridPos , teilPos);
+                    //mapObjectSpawner.LoadObjectsNearPlayer(gridPos , teilPos);
                     
                 }
             }

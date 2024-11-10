@@ -1,5 +1,6 @@
 using MainSSM;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -21,7 +22,7 @@ public class MapObjectSpawner : MonoBehaviour
     {
    
         string key = $"{tilemapPos.x}_{tilemapPos.y}";
-        Debug.Log(key);
+
         if (!objectDictionary.ContainsKey(key))
         {            
             SpawnObjects(key, tilemapWordPos);
@@ -31,23 +32,29 @@ public class MapObjectSpawner : MonoBehaviour
 
     private void SpawnObjects(string key, Vector3 tilemapWordPos)
     {
-        
+
         Vector3 centerPos = tilemapWordPos;
-        if(Random.value > 0.6f)
+        List<Vector2> ObjPoss = new List<Vector2>();
+        GameObject prefab = (Random.value > 0.6f) ? treePrefab : rockPrefab;
+        objectsPerRegion = Random.Range(0, 10);
+        if (Random.value > 0.8f)
         {
-            for (int i = 0; i < objectsPerRegion; i++)
+            for (int i = 0; i < objectsPerRegion; i++) // 포지션 정하는 함수 
             {
-                float xRange = Random.Range(centerPos.x - spawnRadius / 10, centerPos.x + spawnRadius / 10);
-                float yRange = Random.Range(centerPos.y - spawnRadius / 10, centerPos.y + spawnRadius / 10);
+                float xRange = Random.Range(centerPos.x - spawnRadius / 13, centerPos.x + spawnRadius / 13);
+                float yRange = Random.Range(centerPos.y - spawnRadius / 13, centerPos.y + spawnRadius / 13);
 
                 Vector2 randomPosition = new Vector2(xRange, yRange);
-                GameObject prefab = (Random.value > 0.5f) ? treePrefab : rockPrefab;
-                GameObject obj = Instantiate(prefab, randomPosition, Quaternion.identity);
-
+                ObjPoss.Add(randomPosition);
             }
-        }
-      
-        objectDictionary.Add(key, rockPrefab); // 오브젝트 저장 나무 돌은 배열로 가지고 있기
-    }
+            ObjPoss.Sort((a, b) => b.y.CompareTo(a.y)); // y가 높은순으로 정렬
+            for (int i = 0; i < objectsPerRegion; i++) // 생성하는함수 정렬해서 배열
+            {
+               
+                GameObject obj = Instantiate(prefab, ObjPoss[i], Quaternion.identity);
+            }
 
+            objectDictionary.Add(key, rockPrefab); // 오브젝트 저장 나무 돌은 배열로 가지고 있기
+        }
+    }
 }
