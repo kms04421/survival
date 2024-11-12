@@ -1,13 +1,12 @@
 
 using UnityEngine;
-using UnityEngine.UI;
 namespace MainSSM
 {
     public class Player : MonoBehaviour, IHitListener
     {
         public FloatingJoystick movejoy;
         public FloatingJoystick rotejoy;
-        public Slider Hpbar; //UIManager로 이동
+
         public GameObject weapoon;
         private SpriteRenderer weapoonSprite;
         private SpriteRenderer spriteRenderer;
@@ -17,10 +16,11 @@ namespace MainSSM
         private Vector2 rote;
         private Vector2 vector2Zero;
         float isMoving = 0;
-        public WeaponController weaponController;
+        [HideInInspector] public WeaponController weaponController;
         static public bool ActionPlayer = true;
         public PlayerData playerData;
         private PlayerState currentState; // 현재 상태
+        private Inventory inventory;
         private enum PlayerState
         {
             Idle,// 기본
@@ -30,12 +30,13 @@ namespace MainSSM
         // Start is called before the first frame update
         void Awake()
         {
-            playerData = new PlayerData(10, 5, 1);
+            playerData = new PlayerData(10, 3.5f, 100);
             vector2Zero = new Vector2(0, 0);
             spriteRenderer = GetComponent<SpriteRenderer>();
             weapoonSprite = weapoon.transform.GetChild(0).GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
             rigid = GetComponent<Rigidbody2D>();
+            inventory = GetComponent<Inventory>();
         }
         private void Update()
         {
@@ -46,7 +47,7 @@ namespace MainSSM
         private void FixedUpdate()
         {
             PerformAction();
-           
+
         }
         private void LateUpdate()
         {
@@ -86,7 +87,7 @@ namespace MainSSM
         {
             switch (currentState)
             {
-                case PlayerState.Idle:                   
+                case PlayerState.Idle:
                     rigid.MovePosition(rigid.position + movement * playerData.Speed * Time.fixedDeltaTime);
                     WeapoonMove();
                     break;
@@ -95,10 +96,10 @@ namespace MainSSM
                 case PlayerState.Die:
                     break;
             }
-           
+
 
         }
-      
+
         private void WeapoonMove()
         {
 
@@ -115,20 +116,29 @@ namespace MainSSM
             Vector3 direction = new Vector3(rote.x, rote.y, 0).normalized;
             weapoon.transform.position = transform.position + direction * 0.75f;
         }
-   
+
         public void OnHit(int dam)
-        {          
+        {
+            if (currentState == PlayerState.Die) return;
             playerData.TakeDamage(dam);
-            HpBarSet();
-           if(playerData.Hp <=0)
+            UIManager.Instance.HpBarSet(playerData);
+            if (playerData.Hp <= 0)
             {
                 currentState = PlayerState.Die;
             }
         }
-        public void HpBarSet() // uiManager로 이동
+      
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-
-            Hpbar.value = (float)playerData.Hp/playerData.MaxHp;
+            if (collision.gameObject.layer == 6)
+            {
+                Item item = collision.GetComponent<Item>();
+                if (item != null)
+                {
+                    inventory.AddItem(item.PickupItem());
+                }
+            }
         }
+
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -344968051452727912}
   - component: {fileID: 1619078284190030345}
   - component: {fileID: 5213614781842592941}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: WoodEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,4 +198,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35aad5fa6146eff429c6c2984f97e77d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemydata:
+    HP: 0
+    Speed: 0
+    Damage: 0
+    name: 
+    Type: 
+  itemList:
+  - {fileID: 11400000, guid: 0c73ec8e59357144d8d6bc1578b1e03e, type: 2}
   spawnIndex: 0

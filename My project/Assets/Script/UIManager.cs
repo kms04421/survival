@@ -2,13 +2,19 @@ using MainSSM;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-public class UIManager : MonoBehaviour
+using TMPro;
+public class UIManager : SingletonBehaviour<UIManager>
 {
     public Slider timeBar;
     public WaitForSeconds WaitForSeconds;
     public delegate void TimeEndEvet(); // 타이머 종료시 함수들 담는용
     public TimeEndEvet timeEndEvet; // 타이머 종료시 함수들 담는용
     private RoundManager roundManager;
+    public Slider playerHPBar;
+    public TextMeshProUGUI hpText;
+    public TextMeshProUGUI atkText;
+    public TextMeshProUGUI dfsText;
+    public TextMeshProUGUI apsText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -40,6 +46,17 @@ public class UIManager : MonoBehaviour
         }
         timeEndEvet?.Invoke();
     }
+    public void HpBarSet(ICharacterData characterData) // uiManager로 이동
+    {
 
+        playerHPBar.value = (float)characterData.Hp / characterData.MaxHp;
+        
+    }
+    public void MenuOnEnable()
+    {
+        
+    }
+
+     
 
 }

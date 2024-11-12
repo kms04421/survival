@@ -9,17 +9,15 @@ namespace MainSSM
         [HideInInspector]public RoundManager roundManager;
 
         private UIManager UIManager;
-        public int monstersKilled = 0;
+        [HideInInspector]public int monstersKilled = 0;
 
     
         private void Awake()
-        {
-          
+        {          
             UIManager = GetComponent<UIManager>();
             roundManager = new RoundManager();
             PlayerPosition = GameObject.Find("Player").transform;
             roundManager.SetRoundParameters();// 시작시 몬스터 수량을 위해 추가
-
         }
 
        

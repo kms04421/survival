@@ -10,7 +10,7 @@ namespace MainSSM
         public float delay = 0.5f; // 회전 간격 (초)
 
         private bool rotatingLeft = true; // 왼쪽, 오른쪽 회전 방향
-        private int Dam = 1;
+        private int Dam = 100;
         private void Start()
         {
             StartCoroutine(RotateObject());
@@ -38,6 +38,7 @@ namespace MainSSM
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
+    
             if (!Player.ActionPlayer) return;
             if(collision.gameObject.layer >= 7)
             {

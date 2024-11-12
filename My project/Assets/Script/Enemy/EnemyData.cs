@@ -1,25 +1,34 @@
+using System.Runtime.InteropServices;
+
 namespace MainSSM
 {
-    public class EnemyData : ICharacterData
+    [System.Serializable]
+    public class EnemyData 
     {
-        public int Hp { get; set; }
-        public float Speed { get; set; }
-        public int Damage { get; set; }
+        public int HP;
+        public float Speed;
+        public int Damage;
 
-        public EnemyData(int hp, float speed, int damage)
+        public string name;
+        public string Type;
+
+        public EnemyData(EnemyData data)
         {
-            Hp = hp;
-            Speed = speed;
-            Damage = damage;
-        }
+            HP = data.HP;
+            Speed = data.Speed;
+            Damage = data.Damage;
+            Type = data.Type;
 
+        }
         public void TakeDamage(int amount) //hp 데미지 적용
         {
-            Hp -= amount;
+            HP -= amount;
         }
         public void HpSet()//몬스터 hp셋팅
         {
-            Hp = GameManager.Instance.roundManager.GetMonsterHPForCurrentRound();// 몬스터 라운드별 hp
+            int CurrentHp = GameManager.Instance.roundManager.GetMonsterHPForCurrentRound();// 몬스터 라운드별 hp
+            HP = CurrentHp;
+        
         }
     }
 

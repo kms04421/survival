@@ -1,4 +1,7 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 
@@ -8,7 +11,7 @@ namespace MainSSM
     {
         private Rigidbody2D target; // player Rigidbody2D
         private Animator animator; // 몬스터 에니메이터
-        public EnemyData enemydata; // 몬스터 기본 정보 HP,Speed,Damage등
+        [HideInInspector]public EnemyData enemydata; // 몬스터 기본 정보 HP,Speed,Damage등
         private BoxCollider2D boxCollider; // 몬스터 박스콜라이더
         private WaitForSeconds knockbackDelay; // 넉백 대기 시간
         private Rigidbody2D rigid; // 몬스터 Rigidbody2D
@@ -18,6 +21,7 @@ namespace MainSSM
         private Vector2 Speed; // 몬스터 스피드
         private float lastHitTime = 0f; // 마지막 피격 시간을 추적
         private float hitCooldown = 1f; // 1초 간격
+        public List<ItemData> itemList; // 드랍 아이템 목록
         [HideInInspector]public int spawnIndex = 0;
         private enum EnemyState
         {
@@ -26,8 +30,7 @@ namespace MainSSM
             Die // 사망
         }
         private void Awake()
-        {
-            enemydata = new EnemyData(10, 3, 1); // 몬스터 기본 정보 세팅 추후 수정필요
+        {           
             knockbackDelay = new WaitForSeconds(0.2f);
             gamemanager = GameManager.Instance;
             boxCollider = GetComponent<BoxCollider2D>();
@@ -51,13 +54,14 @@ namespace MainSSM
             switch (currentState)
             {
                 case EnemyState.Chase:
-                    if (enemydata.Hp <= 0)
+                    if (enemydata.HP <= 0)
                     {
                         currentState = EnemyState.Die;
                         animator.SetBool("Dead", true);
                         boxCollider.isTrigger = true;
                         Invoke("OnDie", 3);
                         rigid.linearVelocity = Vector2.zero;
+                        DropItems();
                     }
                     break;
                 case EnemyState.Hit:
@@ -95,7 +99,7 @@ namespace MainSSM
             spriteRenderer.flipX = target.position.x < rigid.position.x;
         }
         public void OnHit(int num)//몬스터 히트 시
-        {
+        {       
             if (currentState == EnemyState.Die) return;
             enemydata.TakeDamage(num);
             animator.SetTrigger("Hit");
@@ -132,10 +136,34 @@ namespace MainSSM
             }
 
         }
+
+        private void DropItems()
+        {
+            foreach (ItemData item in itemList)
+            {
+                if (Random.value < item.dropChance)
+                {
+                    DropItem(item);
+                }
+            }
+        }
+
+        private void DropItem(ItemData itemData)
+        {
+            if (itemData.itemPrefab != null)
+            {
+                GameObject go = ItemManager.Instance.GetItem(itemData.itemPrefab.name);
+                Vector3 randomOffset = new Vector3(Random.insideUnitCircle.x, Random.insideUnitCircle.y, 0) * 0.5f;
+                Vector3 dropPosition = transform.position + randomOffset;
+                go.transform.position = dropPosition;
+                go.SetActive(true);
+            }
+        }
+
         private void OnCollisionStay2D(Collision2D collision)
         {
             if (currentState == EnemyState.Die) return;
-            if (collision.collider.gameObject.layer == 6)
+            if (collision.collider.gameObject.layer == 9)
             {
                 if (Time.time - lastHitTime >= hitCooldown)
                 {
@@ -144,7 +172,7 @@ namespace MainSSM
                     // 마지막 피격 시간 갱신
                     lastHitTime = Time.time;
                 }
-            }else if (collision.collider.gameObject.layer != 7)
+            }else if (collision.collider.gameObject.layer != 10)
             {
                 collision.gameObject.SetActive(false);
             }

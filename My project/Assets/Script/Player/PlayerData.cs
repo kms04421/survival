@@ -6,7 +6,7 @@ public class PlayerData : ICharacterData
     public float Speed { get; set; }
     public int Damage { get; set; }
     public int MaxHp { get; set; }
-    public PlayerData(int hp, float speed, int damage)
+    public PlayerData(int hp, float speed, int damage)      
     {
         Hp = hp;
         Speed = speed;

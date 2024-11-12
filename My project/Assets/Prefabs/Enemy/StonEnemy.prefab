@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4787018622953850433}
   - component: {fileID: 7896506257597416405}
   - component: {fileID: -483937483782736340}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: StonEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,4 +198,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35aad5fa6146eff429c6c2984f97e77d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemydata:
+    HP: 0
+    Speed: 0
+    Damage: 0
+    name: 
+    Type: 
+  itemList:
+  - {fileID: 11400000, guid: 266f0f3ea35ea574ab9a911e8643d222, type: 2}
+  - {fileID: 11400000, guid: 0a234188f6a7998459915e4d7ee73d19, type: 2}
+  - {fileID: 11400000, guid: 420ba94e253e15d479515832f8ef1a5f, type: 2}
   spawnIndex: 0

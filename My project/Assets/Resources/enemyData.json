@@ -1,0 +1,33 @@
+{
+    "EnemyList": [
+      {
+        "HP": 8,
+        "Speed": 3,
+        "Damage": 3,
+        "name": "Enemy0",
+        "Type": "CloseRange"
+      },
+      {
+        "HP": 15,
+        "Speed": 2.5,
+        "Damage": 5,
+        "name": "StonEnemy",
+        "Type": "CloseRange"
+      },
+      {
+        "HP": 5,
+        "Speed": 3,
+        "Damage": 2,
+        "name": "WaterSlime",
+        "Type": "CloseRange"
+      },
+      {
+        "HP": 10,
+        "Speed": 3,
+        "Damage": 4,
+        "name": "WoodEnemy",
+        "Type": "CloseRange"
+      }
+    ]
+    
+  }

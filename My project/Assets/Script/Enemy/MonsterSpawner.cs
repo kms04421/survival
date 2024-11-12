@@ -6,10 +6,10 @@ namespace MainSSM
     public class MonsterSpawner : SingletonBehaviour<MonsterSpawner>
     {
         private static MonsterSpawner instance; 
-        public Transform player;    // 플레이어의 Transform
+        [HideInInspector]public Transform player;    // 플레이어의 Transform
         public List<GameObject> monsterPrefabs;
-        public float minRadius = 10f;   // 최소 소환 범위
-        public float maxRadius = 15f;  // 최대 소환 범위
+        [HideInInspector]public float monsterSPMinRadius = 10f;   // 최소 소환 범위
+        [HideInInspector]public float monsterSPMaxRadius = 15f;  // 최대 소환 범위
         private GameManager gameManager;//게임메니저 싱글톤 GameManager.Instance; 저장용
         private List<Queue<GameObject>> MonsterQueue; //몬스터 프리팹을 큐 리스트로 저장 오브젝트 풀링용 이유 : 여러 마리의 몬스터를 종류별로 소환하기 위해 
         WaitForSeconds forSeconds;
@@ -25,11 +25,14 @@ namespace MainSSM
                 GameObject monstr = new GameObject();
                 monstr.name = monster.name;
                 monstr.transform.parent = gameObject.transform;
-
+               
                 Queue<GameObject> queue = new Queue<GameObject>();
                 for (int i = 0; i < 100; i++)
                 {
                     GameObject go = Instantiate(monster, monstr.transform);
+                    Enemy enemy = go.GetComponent<Enemy>(); // json으로 가져온 데이터 세팅
+                    enemy.enemydata = new EnemyData(JsonDataLoad.enemies[monstr.name]);//딕셔너리에서 이름을 key값으로 세팅
+
                     queue.Enqueue(go);
                     go.SetActive(false);
                 }
@@ -53,7 +56,7 @@ namespace MainSSM
 
             // 랜덤 각도와 반경 계산
             float randomAngle = Random.Range(0f, 2f * Mathf.PI); //Mathf.PI 원의 둘래 계산시 사용
-            float randomRadius = Random.Range(minRadius, maxRadius);
+            float randomRadius = Random.Range(monsterSPMinRadius, monsterSPMaxRadius);
 
             // 랜덤 위치 계산
             Vector3 spawnPosition = playerPosition + new Vector3(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle), 0) * randomRadius;
