@@ -8,13 +8,11 @@ namespace MainSSM
 
         [HideInInspector]public RoundManager roundManager;
 
-        private UIManager UIManager;
         [HideInInspector]public int monstersKilled = 0;
 
     
         private void Awake()
         {          
-            UIManager = GetComponent<UIManager>();
             roundManager = new RoundManager();
             PlayerPosition = GameObject.Find("Player").transform;
             roundManager.SetRoundParameters();// 시작시 몬스터 수량을 위해 추가
@@ -24,8 +22,11 @@ namespace MainSSM
         public void IncreaseMonstersKilled() // 몬스터 킬카운터 추가
         {
             monstersKilled++;
+           
+            UIManager.Instance.monsterTotalAmount.text = (roundManager.EnemyCount - monstersKilled).ToString();
             if (monstersKilled == roundManager.EnemyCount)
-            {                
+            {
+                UIManager.Instance.ActivateTimer();
                 monstersKilled = 0;
             }
         }

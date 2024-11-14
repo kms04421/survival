@@ -56,6 +56,7 @@ namespace MainSSM
                 case EnemyState.Chase:
                     if (enemydata.HP <= 0)
                     {
+                        gamemanager.IncreaseMonstersKilled();
                         currentState = EnemyState.Die;
                         animator.SetBool("Dead", true);
                         boxCollider.isTrigger = true;
@@ -123,7 +124,7 @@ namespace MainSSM
         public void OnDie()//몬스터 사망 시 3초후 제거
         {
             gameObject.SetActive(false);
-            gamemanager.IncreaseMonstersKilled();
+
             MonsterSpawner.Instance.EnqueueMonster(gameObject , spawnIndex);
         }
         IEnumerator WaitForKnockback() // 몬스터 경직

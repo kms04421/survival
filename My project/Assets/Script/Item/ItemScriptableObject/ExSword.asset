@@ -10,14 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cd68a62583a0074085ece26389461f4, type: 3}
-  m_Name: Wood
+  m_Name: ExSword
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 6492886965202016776, guid: e92b269e28a60b44da47b3d20baa8ba6, type: 3}
-  dropChance: 0.525
-  itemType: 4
-  isStackable: 0
-  attackPower: 0
+  itemPrefab: {fileID: 5701332260386168281, guid: 8ebb6c2cd19fcab4f8741542622a9e5a, type: 3}
+  dropChance: 0
+  itemType: 1
+  waponType: 0
+  isStackable: 1
+  attackPower: 10
   defensePower: 0
+  attackSpeed: 5.5
+  Speed: 0
   healthRecovery: 0
-  itemCode: 4
-  icon: {fileID: 0}
+  itemCode: 1010
+  icon: {fileID: -5810926258156994795, guid: eb2882ccaf8b3f64ca1bb2e9e4147740, type: 3}

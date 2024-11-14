@@ -6,7 +6,7 @@ using UnityEngine;
 public class ItemManager : SingletonBehaviour<ItemManager>
 {
     public ItemData[] itemDataArray;
-    private Dictionary<string, Queue<GameObject>> itemPool;  // 아이템 풀
+    public Dictionary<string, Queue<GameObject>> itemPool;  // 아이템 풀
     public Transform items;
 
     void Start()
@@ -22,9 +22,10 @@ public class ItemManager : SingletonBehaviour<ItemManager>
         for (int i = 0; i < itemDataArray.Length; i++)
         {
             Queue<GameObject> itemQueue = new Queue<GameObject>();
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 50; j++)
             {
                 GameObject itemObj = Instantiate(itemDataArray[i].itemPrefab,items);
+                itemObj.name = itemDataArray[i].itemPrefab.name;
                 Item item = itemObj.GetComponent<Item>();
                 item.itemData = itemDataArray[i];
                 itemQueue.Enqueue(itemObj);

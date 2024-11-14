@@ -1,5 +1,7 @@
 
 using UnityEngine;
+using System.Collections.Generic;
+
 namespace MainSSM
 {
     public class Player : MonoBehaviour, IHitListener
@@ -7,20 +9,25 @@ namespace MainSSM
         public FloatingJoystick movejoy;
         public FloatingJoystick rotejoy;
 
-        public GameObject weapoon;
-        private SpriteRenderer weapoonSprite;
-        private SpriteRenderer spriteRenderer;
-        private Animator animator;
-        private Rigidbody2D rigid;
-        private Vector2 movement;
-        private Vector2 rote;
-        private Vector2 vector2Zero;
-        float isMoving = 0;
-        [HideInInspector] public WeaponController weaponController;
-        static public bool ActionPlayer = true;
+        private GameObject weapoon; // 무기 
+        
+        [HideInInspector] public WeaponController weaponController; // 무기 컨트롤러
+
+        [HideInInspector]public SpriteRenderer spriteRenderer; // 플레이어 sprite
+        private Animator animator;  //플레이어 에니메이터
+        private Rigidbody2D rigid; //플레이어 rigdboy
+        private Vector2 movement; //움지임 저장용 xy
+        [HideInInspector]public Vector2 rote; // 플레이어 무기 회전각 저장용 xy
+        float isMoving = 0; //에니메이션 속도 용
+
+    
+
+        private Inventory inventory; // 인벤토리
+      
+
+
         public PlayerData playerData;
         private PlayerState currentState; // 현재 상태
-        private Inventory inventory;
         private enum PlayerState
         {
             Idle,// 기본
@@ -30,24 +37,24 @@ namespace MainSSM
         // Start is called before the first frame update
         void Awake()
         {
-            playerData = new PlayerData(10, 3.5f, 100);
-            vector2Zero = new Vector2(0, 0);
+            weapoon = transform.Find("Weapon").gameObject;
+            weaponController = weapoon.GetComponent<WeaponController>();
+           
+            playerData = new PlayerData(100, 3.5f, 100,1,2.5f);
+          
             spriteRenderer = GetComponent<SpriteRenderer>();
-            weapoonSprite = weapoon.transform.GetChild(0).GetComponent<SpriteRenderer>();
+
             animator = GetComponent<Animator>();
             rigid = GetComponent<Rigidbody2D>();
             inventory = GetComponent<Inventory>();
         }
         private void Update()
         {
-
             UpdateState();
-
         }
         private void FixedUpdate()
         {
             PerformAction();
-
         }
         private void LateUpdate()
         {
@@ -64,7 +71,7 @@ namespace MainSSM
             isMoving = movement.magnitude;
             animator.SetFloat("Speed", isMoving);
         }
-        private void UpdateState()
+        private void UpdateState() // 업데이트 값받기
         {
             switch (currentState)
             {
@@ -83,13 +90,13 @@ namespace MainSSM
                     break;
             }
         }
-        private void PerformAction()
+        private void PerformAction() // 물리효과 업데이트 
         {
             switch (currentState)
             {
                 case PlayerState.Idle:
                     rigid.MovePosition(rigid.position + movement * playerData.Speed * Time.fixedDeltaTime);
-                    WeapoonMove();
+                    weaponController.Attack();
                     break;
                 case PlayerState.Menu:
                     break;
@@ -100,24 +107,9 @@ namespace MainSSM
 
         }
 
-        private void WeapoonMove()
-        {
+    
 
-            if (rote == vector2Zero)
-            {
-                if (rote.x == 0 && rote.y == 0)
-                {
-                    weapoon.transform.position = transform.position;
-                    ActionPlayer = false;
-                }
-                return;
-            }
-            ActionPlayer = true;
-            Vector3 direction = new Vector3(rote.x, rote.y, 0).normalized;
-            weapoon.transform.position = transform.position + direction * 0.75f;
-        }
-
-        public void OnHit(int dam)
+        public void OnHit(int dam) // IHitListener히트용 인터페이스 몬스터 플레이어 적용 히트시 작동
         {
             if (currentState == PlayerState.Die) return;
             playerData.TakeDamage(dam);
@@ -128,7 +120,7 @@ namespace MainSSM
             }
         }
       
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnTriggerEnter2D(Collider2D collision) 
         {
             if (collision.gameObject.layer == 6)
             {

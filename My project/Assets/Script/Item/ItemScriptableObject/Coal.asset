@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 7997472869935246084, guid: d147744d561740a4e9b73e6e092ee2cd, type: 3}
   dropChance: 0.406
-  itemType: 0
+  itemType: 4
   isStackable: 0
   attackPower: 0
   defensePower: 0
   healthRecovery: 0
+  itemCode: 1
+  icon: {fileID: 1154383715, guid: b7ca5692d77a23f4bbfa9d9188c01f75, type: 3}

@@ -11,14 +11,15 @@ public class RoundManager : MonoBehaviour
 
     private float hpMultiplier = 1.2f; // HP가 증가 비율
 
-    public int roundTime = 100; // 스테이지 시간
+    public int roundTime = 10; // 스테이지 시간
     public void SetRoundParameters()// 라운드별 몬스터 수량
     {
         EnemyCount = currentRound * 5; // 예: 라운드에 따라 적 수 증가
-
+        UIManager.Instance.monsterTotalAmount.text = EnemyCount.ToString();
     }
     public void NextRound()//다음 라운드로 진행 함수
     {
+      
         currentRound++;
         SetRoundParameters();
         MonsterSpawner.Instance.SpawnMonster(); // 몬스터 스폰
