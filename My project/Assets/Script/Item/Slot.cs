@@ -5,14 +5,25 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
-    public Image image;
-
-    public TextMeshProUGUI textMeshPro;
-    public int quantity = 0;
+    private Image image;
+    private TextMeshProUGUI quantityText;
+    [HideInInspector] public int quantity = 0;
     public ItemData itemData;
     [SerializeField] private SlotType slotType;
+    public UnityEvent OnSwapEvent;
+    public UnityEvent OnDropEvent;
 
-    public UnityEvent onActionTriggered;
+    public void Start()
+    {
+        SetSlot(itemData);
+    }
+    private void OnEnable()
+    {
+        image = transform.GetChild(0).GetComponent<Image>();
+        quantityText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        
+    }
+
     private enum SlotType
     {
         Equipment,
@@ -47,6 +58,7 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                 if (droppedSlot.itemData.itemType != ItemType.Weapon) return;
 
                 SwapItems(droppedSlot);// 아이템 스왑
+                DropEvent();
 
                 break;
             case SlotType.Mixture:
@@ -54,16 +66,8 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                 Inventory.Instance.CraftItem();
                 break;
             case SlotType.Inventory:
-                if (droppedSlot.slotType == SlotType.result)
-                {
-                    if (itemData != null) return;
-                    if (!Inventory.Instance.MinItem()) return;
-                }
-                if (droppedSlot.slotType == SlotType.Mixture)
-                {
-                    droppedSlot.Init();
-                    return;
-                }
+
+                if (!ProcessInventorySlotDrop(droppedSlot)) return; // 인벤토리에 드랍된 슬롯 타입 에따라 드롭한 슬롯 이벤트 실행 
                 SwapItems(droppedSlot);// 아이템 스왑
 
                 break;
@@ -71,21 +75,48 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
                 break;
         }
-
-
+ 
 
     }
 
-    public void OnEvent()
+    public bool ProcessInventorySlotDrop(Slot droppedSlot)// 인벤토리에 드랍된 슬롯 타입 에따라 드롭한 슬롯 이벤트 실행 
     {
-        onActionTriggered?.Invoke();
+        switch (droppedSlot.slotType)
+        {
+            case SlotType.Equipment:
+                droppedSlot.DropEvent();
+                break;
+            case SlotType.Mixture:
+                droppedSlot.Init();
+                Inventory.Instance.CraftItem();
+                return false;
+              
+            case SlotType.Inventory:
+               
+                break;
+            case SlotType.result:
+                if (itemData != null) return false;
+                if (!Inventory.Instance.MinItem()) return false;
+                break;
+
+        }
+        return true;
     }
+
     public void OnEndDrag(PointerEventData eventData)
     {
 
         UIManager.Instance.dragSlot.SetColor(0);
         UIManager.Instance.dragSlot.slot = null;
 
+    }
+    public void DropEvent() // 드롭 이벤트 실행
+    {
+        OnDropEvent?.Invoke();
+    }
+    public void SwapEvent() // 스왑시 이벤트 실행 
+    {
+        OnSwapEvent?.Invoke();
     }
 
 
@@ -104,8 +135,7 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         // 이미지와 텍스트 업데이트
         UpdateSlotUI();
         otherSlot.UpdateSlotUI();
-        OnEvent();
-        otherSlot.OnEvent();
+
     }
 
     private void UpdateSlotUI() //ui스왑
@@ -113,61 +143,73 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         if (itemData != null)
         {
             image.sprite = itemData.icon;
-            textMeshPro.text = "x" + quantity.ToString();
+            quantityText.text = "x" + quantity.ToString();
 
         }
         else
         {
             image.sprite = null;
-            textMeshPro.text = "";
+            quantityText.text = "";
 
         }
     }
 
     private void MixtureItemSlotDrop(Slot slot) //조합슬롯에 드롭시 아이템 수량 증가 혹은 새로 추가
     {
+       
         if (itemData == null || !itemData.itemCode.Equals(slot.itemData.itemCode))
         {
             quantity = 1;
-            textMeshPro.text = "x" + quantity.ToString();
+            quantityText.text = "x" + quantity.ToString();
         }
         else if (slot.quantity > quantity)
         {
             quantity++;
-            textMeshPro.text = "x" + quantity.ToString();
+            quantityText.text = "x" + quantity.ToString();
         }
 
         itemData = slot.itemData;
         image.sprite = slot.itemData.icon;
     }
 
-    public void Init()
+    public void Init() // slot초기화
     {
         image.sprite = null;
-        textMeshPro.text = "";
+        quantityText.text = "";
         quantity = 0;
         itemData = null;
     }
-    private void OnDisable()
+    public void SetSlot(ItemData _itemData) // 슬로 기본정보 세팅
     {
-        if (slotType == SlotType.Mixture || slotType == SlotType.result)
-        {
-            Init();
-        }
+        if (_itemData == null) return;
+        image.sprite = _itemData.icon;
+        itemData = _itemData;
+        quantity = 0;
+        AddQuantity();
     }
 
-    public void LinkSlot(Slot slot)
+    public void AddQuantity()//quantity 수량추가
     {
-        itemData = slot.itemData;
-        image.sprite = slot.image.sprite;
-        if (slot.quantity > 0 && slot.itemData.itemType != ItemType.Weapon)
+        quantity++;
+        quantityText.text = "x" + quantity.ToString();
+    }
+    public void DecCountQuantity(int num) // quantity 수량 차감 0이면 초기화
+    {
+       
+        int tempquantity = quantity - num;
+        if (tempquantity <= 0)
         {
-            textMeshPro.text = "x" + slot.quantity.ToString();
-
+            Init();
+            return;
         }
-        else
+        quantity = tempquantity;
+        quantityText.text = "x" + quantity.ToString();
+    }
+    public void OnDisable()
+    {
+        if(slotType == SlotType.Mixture || slotType == SlotType.result)
         {
-            textMeshPro.text = "";
+            Init();
         }
     }
 }

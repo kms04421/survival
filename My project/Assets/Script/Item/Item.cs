@@ -17,16 +17,15 @@ public class Item : MonoBehaviour
     }
     void ItemEnqueue()
     {
-        ItemManager.Instance.itemPool[gameObject.name].Enqueue(gameObject);
+        ObjectPoolingManager.Instance.itemPool[gameObject.name].Enqueue(gameObject);
     }
 
-    public ItemData PickupItem()
+    public void PickupItem()
     {
         //아이템 수집 시 이벤트
         OnItemPickupItem?.Invoke();
         
         //아이템 비활성화
         gameObject.SetActive(false);
-        return itemData;
     }
 }

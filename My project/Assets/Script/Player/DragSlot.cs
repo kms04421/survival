@@ -4,15 +4,13 @@ using UnityEngine.UI;
 
 public class DragSlot : MonoBehaviour
 {
-    public Slot slot;
-    public Image image;
-    public ItemData itemData;
-
-    private void Start()
+    [HideInInspector]public Slot slot;//슬롯저장용
+    [HideInInspector]public Image image;//이미지 컴퍼넌트 저장용
+   
+    private void OnEnable()
     {
-      image = GetComponent<Image>();   
+        image = GetComponent<Image>();
     }
-
     public void DragSetImage(Image _image)
     {
         image.sprite = _image.sprite;

@@ -1,4 +1,4 @@
-using NUnit.Framework.Interfaces;
+
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -8,42 +8,56 @@ public class Inventory : SingletonBehaviour<Inventory>
     [HideInInspector] public Slot[] mixture;
 
     private Dictionary<string, int> itemCounts;
-    public GameObject invnetoryObj;
-    public GameObject mixtureObj;
+    public GameObject invnetoryObj; //인베토리 ui
+    public GameObject mixtureObj;   //조합 ui
+    public GameObject selectObj;    //선택 ui
     public List<ItemData> mixitemList;//조합 아이템 리스트 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         itemCounts = new Dictionary<string, int>();
-        SetArray(ref slots, invnetoryObj, 33); // 인벤토리 배열
-        SetArray(ref mixture, mixtureObj, 5); // 조합배열
+        SetArray(ref slots, invnetoryObj); // 인벤토리 배열
+        SetArray(ref mixture, mixtureObj); // 조합배열
+        AddArray(ref slots, selectObj);
 
     }
 
-    public void SetArray(ref Slot[] array, GameObject tragetObj, int size)//타겟오브젝트 배열에 저장
+    public void SetArray(ref Slot[] array, GameObject tragetObj)//타겟오브젝트 배열에 저장
     {
+        int size = tragetObj.transform.childCount;
         array = new Slot[size];
-        int invnetoryCount = tragetObj.transform.childCount;
-        for (int i = 0; i < invnetoryCount; i++)
+        for (int i = 0; i < size; i++)
         {
             Transform invnetoryObjtransform = tragetObj.transform.GetChild(i);
             array[i] = invnetoryObjtransform.GetComponent<Slot>();
         }
     }
-
+    public void AddArray(ref Slot[] array, GameObject tragetObj)//배열에 원하는 오브젝트 solt 추가
+    {
+        Slot[] copy = new Slot[array.Length + (tragetObj.transform.childCount-1)];
+        int AddIndex = 0; //추가할 오브젝트 카운트
+        array.CopyTo(copy, 0);
+        for (int i = array.Length-1; i < copy.Length; i++)
+        {
+            Transform Objtransform = tragetObj.transform.GetChild(AddIndex);
+           
+            copy[i] = Objtransform.GetComponent<Slot>();
+            AddIndex ++;    
+        }
+        array = new Slot[copy.Length];
+        copy.CopyTo(array, 0);
+    }
     public void AddItem(ItemData itemData)// 아이템 추가
     {
 
         bool itemAdded = false;
         int index = -1;
-        for (int i = 0; i < slots.Length; i++)
+        for (int i = 0; i < slots.Length; i++)//중복아이템 체크 없다면 아이템 인벤토리 가장앞에 추가
         {
             // 같은 아이템이 이미 있다면
-            if (slots[i].itemData != null && slots[i].itemData.name == itemData.name)
+            if (slots[i].itemData != null && slots[i].itemData.itemCode == itemData.itemCode)
             {
-
-                slots[i].quantity++;
-                slots[i].textMeshPro.text = "x" + slots[i].quantity.ToString();
+                slots[i].AddQuantity();// 수량 추가
                 itemAdded = false;
                 break;
             }
@@ -57,11 +71,7 @@ public class Inventory : SingletonBehaviour<Inventory>
         }
         if (itemAdded)
         {
-            itemData.icon = itemData.itemPrefab.GetComponent<SpriteRenderer>().sprite;
-            slots[index].itemData = itemData;
-            slots[index].image.sprite = itemData.icon;
-            slots[index].quantity = 1;  // 아이템을 추가할 때 초기 수량은 1로 설정
-            slots[index].textMeshPro.text = "x" + slots[index].quantity.ToString();
+            slots[index].SetSlot(itemData);
         }
     }
 
@@ -111,16 +121,7 @@ public class Inventory : SingletonBehaviour<Inventory>
             int index = ItemSerch(dic.Key);
             if (index != -1)
             {
-                int min = slots[index].quantity - dic.Value;
-                slots[index].quantity = min;
-                if (slots[index].quantity == 0)
-                {
-                    slots[index].Init();
-                }
-                else
-                {
-                    slots[index].textMeshPro.text ="x"+ min.ToString();
-                }
+                slots[index].DecCountQuantity(dic.Value);
             }
         }
         for (int i = 0; i < mixture.Length-1; i++)
@@ -159,13 +160,11 @@ public class Inventory : SingletonBehaviour<Inventory>
         {
             if (mixitemList[i].itemCode.Equals(mixcode))
             {
-                mixture[4].itemData = mixitemList[i];
-                mixture[4].itemData.icon = mixitemList[i].itemPrefab.GetComponent<SpriteRenderer>().sprite;
-                mixture[4].image.sprite = mixture[4].itemData.icon;
-                mixture[4].quantity = 1;
+                mixture[4].SetSlot(mixitemList[i]);
+                return;
             }
         }
-
+        mixture[4].Init();
     }
    
 

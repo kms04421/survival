@@ -18,20 +18,24 @@ public class UIManager : SingletonBehaviour<UIManager>
     public TextMeshProUGUI monsterTotalAmount;
     public DragSlot dragSlot;
     public PlayerData playerData;
+    public GameObject deadUI;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
         waitForSeconds = new WaitForSeconds(0.01f);
         ADDtimeEndEvet();
-     
+
+
+
     }
     private void Start()
     {
         playerData = FindAnyObjectByType<Player>().playerData;
+        MenuTextUpdate();
     }
-    public void ADDtimeEndEvet()// 이벤트 저장
+    public void ADDtimeEndEvet()// 타이머 종료시 발생할 이벤트 저장
     {
-   
+
         timeEndEvet += SetTimeBarMaxValue; // 타임바 다시채우기
         timeEndEvet += GameManager.Instance.roundManager.NextRound; // 다음라운드로
         timeEndEvet += SetDay;// day텍스트 업데이트
@@ -42,7 +46,7 @@ public class UIManager : SingletonBehaviour<UIManager>
     }
     private void SetDay() // 라운드 레벨 텍스트에 세팅
     {
-        day.text = GameManager.Instance.roundManager.currentRound.ToString()+"Day";
+        day.text = GameManager.Instance.roundManager.currentRound.ToString() + "Day";
     }
     public void ActivateTimer() // 타이머 코루틴 작동
     {
@@ -65,17 +69,23 @@ public class UIManager : SingletonBehaviour<UIManager>
     public void HpBarSet(ICharacterData characterData) // uiManager로 이동
     {
 
-        playerHPBar.value = (float)characterData.Hp / characterData.MaxHp;
-
+        playerHPBar.value = (float)characterData.BaseHp / characterData.MaxHp;
+        hpText.text = playerData.BaseHp.ToString() + " / " + playerData.MaxHp.ToString();
     }
 
 
     public void MenuTextUpdate() // 추후 view로 
     {
-        hpText.text = playerData.Hp.ToString();
-        atkText.text = playerData.Damage.ToString();
-        dfsText.text = playerData.DFS.ToString();
-        apsText.text = playerData.APS.ToString();
+        hpText.text = playerData.BaseHp.ToString() + " / " + playerData.MaxHp.ToString();
+        atkText.text = (playerData.AdditionalAttackPower + playerData.BaseAttackPower).ToString();
+        dfsText.text = (playerData.AdditionalDefensePower + playerData.BaseDefensePower).ToString();
+        apsText.text = (playerData.AdditionalAttackSpeed+ playerData.BaseAttackSpeed).ToString();
+    }
+
+    
+    public void GameOver()//게임오버
+    {
+        deadUI.SetActive(true);
     }
 }
 

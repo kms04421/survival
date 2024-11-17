@@ -3,9 +3,9 @@ namespace MainSSM
 {
     public interface ICharacterData
     {
-        int Hp { get; set; }
-        float Speed { get; set; }
-        int Damage { get; set; }
+        int BaseHp { get; set; }
+        float BaseMovementSpeed { get; set; }
+        int BaseAttackPower { get; set; }
 
         int MaxHp { get; set; }
     }

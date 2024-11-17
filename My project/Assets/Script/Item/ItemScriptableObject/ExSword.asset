@@ -15,7 +15,7 @@ MonoBehaviour:
   itemPrefab: {fileID: 5701332260386168281, guid: 8ebb6c2cd19fcab4f8741542622a9e5a, type: 3}
   dropChance: 0
   itemType: 1
-  waponType: 0
+  waponType: 2
   isStackable: 1
   attackPower: 10
   defensePower: 0

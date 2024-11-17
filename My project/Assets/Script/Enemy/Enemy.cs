@@ -1,7 +1,7 @@
-using NUnit.Framework;
+
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
+
 using UnityEngine;
 
 
@@ -49,20 +49,20 @@ namespace MainSSM
         {
             PerformAction();
         }
-        void UpdateState()//상태 업데이트 
+        void UpdateState()//상태 변화시 작동할 로직 
         {
             switch (currentState)
             {
                 case EnemyState.Chase:
                     if (enemydata.HP <= 0)
                     {
-                        gamemanager.IncreaseMonstersKilled();
-                        currentState = EnemyState.Die;
-                        animator.SetBool("Dead", true);
-                        boxCollider.isTrigger = true;
-                        Invoke("OnDie", 3);
                         rigid.linearVelocity = Vector2.zero;
-                        DropItems();
+                        gamemanager.IncreaseMonstersKilled(); // 플레이어 킬수 추가
+                        animator.SetBool("Dead", true); //사망애니메이션 
+                        boxCollider.isTrigger = true; // 플레이어 충돌하지 않도록 isTrigger 온 //추후 레이어로 충돌안하도록 변경
+                        Invoke("OnDie", 3); // 시체 3초후 사라지도록
+                        DropItems();// 몬스터 사망시 아이템 드롭
+                        currentState = EnemyState.Die;
                     }
                     break;
                 case EnemyState.Hit:
@@ -153,7 +153,7 @@ namespace MainSSM
         {
             if (itemData.itemPrefab != null)
             {
-                GameObject go = ItemManager.Instance.GetItem(itemData.itemPrefab.name);
+                GameObject go = ObjectPoolingManager.Instance.GetItem(itemData.itemPrefab.name);
                 Vector3 randomOffset = new Vector3(Random.insideUnitCircle.x, Random.insideUnitCircle.y, 0) * 0.5f;
                 Vector3 dropPosition = transform.position + randomOffset;
                 go.transform.position = dropPosition;
@@ -173,9 +173,6 @@ namespace MainSSM
                     // 마지막 피격 시간 갱신
                     lastHitTime = Time.time;
                 }
-            }else if (collision.collider.gameObject.layer != 10)
-            {
-                collision.gameObject.SetActive(false);
             }
         }
     }

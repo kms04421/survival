@@ -1,5 +1,7 @@
-using UnityEngine;
 
+using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 namespace MainSSM
 {
     public class GameManager : SingletonBehaviour<GameManager>
@@ -10,12 +12,13 @@ namespace MainSSM
 
         [HideInInspector]public int monstersKilled = 0;
 
-    
+        public List<GameObject> initialObjects;
         private void Awake()
         {          
             roundManager = new RoundManager();
             PlayerPosition = GameObject.Find("Player").transform;
             roundManager.SetRoundParameters();// 시작시 몬스터 수량을 위해 추가
+            InitializeObjects();
         }
 
        
@@ -31,8 +34,24 @@ namespace MainSSM
             }
         }
 
-        
+        public void InitializeObjects()//  오브젝트 초기화
+        {
+            foreach (GameObject obj in initialObjects)
+            {
+                obj.SetActive(true);
+                obj.SetActive(false);
+            }
+        }
 
+        public void QuitGame()//게임종료
+        {
+            Application.Quit();
+        }
 
+        public void RestartGame()
+        {
+            // 현재 씬 다시 로드
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }

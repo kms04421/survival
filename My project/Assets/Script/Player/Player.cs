@@ -85,6 +85,7 @@ namespace MainSSM
                     break;
                 case PlayerState.Die:
                     animator.SetTrigger("Dead");
+                    UIManager.Instance.GameOver();
                     weapoon.SetActive(false);
                     rigid.bodyType = RigidbodyType2D.Kinematic;
                     break;
@@ -95,7 +96,7 @@ namespace MainSSM
             switch (currentState)
             {
                 case PlayerState.Idle:
-                    rigid.MovePosition(rigid.position + movement * playerData.Speed * Time.fixedDeltaTime);
+                    rigid.MovePosition(rigid.position + movement * playerData.BaseMovementSpeed * Time.fixedDeltaTime);
                     weaponController.Attack();
                     break;
                 case PlayerState.Menu:
@@ -114,7 +115,7 @@ namespace MainSSM
             if (currentState == PlayerState.Die) return;
             playerData.TakeDamage(dam);
             UIManager.Instance.HpBarSet(playerData);
-            if (playerData.Hp <= 0)
+            if (playerData.BaseHp <= 0)
             {
                 currentState = PlayerState.Die;
             }
@@ -127,7 +128,8 @@ namespace MainSSM
                 Item item = collision.GetComponent<Item>();
                 if (item != null)
                 {
-                    inventory.AddItem(item.PickupItem());
+                    inventory.AddItem(item.itemData);
+                    item.PickupItem();
                 }
             }
         }
