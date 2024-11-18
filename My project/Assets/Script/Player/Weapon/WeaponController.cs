@@ -63,7 +63,7 @@ namespace MainSSM
                 
             }
             isAttacking = false;
-            ResetWeaponPosition();
+            ResetWeaponPosition(); 
         }
         public bool ResetWeaponPosition()
         {
