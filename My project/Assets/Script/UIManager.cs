@@ -66,20 +66,20 @@ public class UIManager : SingletonBehaviour<UIManager>
         }
         timeEndEvet?.Invoke();
     }
-    public void HpBarSet(ICharacterData characterData) // uiManager로 이동
+    public void HpBarSet() // uiManager로 이동
     {
 
-        playerHPBar.value = (float)characterData.BaseHp / characterData.MaxHp;
-        hpText.text = playerData.BaseHp.ToString() + " / " + playerData.MaxHp.ToString();
+        playerHPBar.value = (float)playerData.BaseHp / playerData.MaxHp;
+        MenuTextUpdate();
     }
-
+ 
 
     public void MenuTextUpdate() // 추후 view로 
     {
-        hpText.text = playerData.BaseHp.ToString() + " / " + playerData.MaxHp.ToString();
-        atkText.text = (playerData.AdditionalAttackPower + playerData.BaseAttackPower).ToString();
-        dfsText.text = (playerData.AdditionalDefensePower + playerData.BaseDefensePower).ToString();
-        apsText.text = (playerData.AdditionalAttackSpeed+ playerData.BaseAttackSpeed).ToString();
+        hpText.text = playerData.BaseHp.ToString() + " / " + playerData.MaxHp.ToString("F1");
+        atkText.text = (playerData.AdditionalAttackPower + playerData.BaseAttackPower).ToString("F1");
+        dfsText.text = (playerData.AdditionalDefensePower + playerData.BaseDefensePower).ToString("F1");
+        apsText.text = (playerData.AdditionalAttackSpeed+ playerData.BaseAttackSpeed).ToString("F1");
     }
 
     

@@ -7,8 +7,8 @@ namespace MainSSM
     {
         public int HP;
         public float Speed;
-        public int Damage;
-
+        public float Damage;
+        public float Power;
         public string name;
         public string Type;
 
@@ -17,16 +17,19 @@ namespace MainSSM
             HP = data.HP;
             Speed = data.Speed;
             Damage = data.Damage;
+            Power = data.Damage;
             Type = data.Type;
 
         }
-        public void TakeDamage(int amount) //hp 데미지 적용
+        public void TakeDamage(float amount) //hp 데미지 적용
         {
-            HP -= amount;
+            HP -= (int)amount;
         }
-        public void HpSet()//몬스터 hp셋팅
+        public void MonstrRoundDataSet()//몬스터 RoundData셋팅
         {
+            if (GameManager.Instance == null) return;
             int CurrentHp = GameManager.Instance.roundManager.GetMonsterHPForCurrentRound();// 몬스터 라운드별 hp
+            Damage = GameManager.Instance.roundManager.GetMonsterPowerForCurrentRound() + Power; // 
             HP = CurrentHp;
         
         }

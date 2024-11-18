@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 namespace MainSSM
 {
-    public class EquipmentSlotManager : MonoBehaviour
+    public class SelectSoltOnClickEvent : MonoBehaviour
     {
         private Player player;
         public List<Slot> equipmentList; // 장비슬롯 리스트
@@ -19,11 +19,21 @@ namespace MainSSM
             {
                 player.playerData.AdditionalStateUP(equipmentList[i].itemData);
             }
-            if(slot.itemData.itemType == ItemType.Weapon)
+            if(slot.itemData != null)
             {
-                player.playerData.AdditionalStateUP(slot.itemData);
+
+                switch(slot.itemData.itemType)
+                {
+                    case ItemType.Weapon:
+                        player.playerData.AdditionalStateUP(slot.itemData);
+                        break;
+                    case ItemType.HealthPotion:
+                        player.playerData.Heal(slot.itemData.healthRecovery);
+                        slot.DecCountQuantity(1);
+                        break;
+                }
+              
             }
-            
 
             UIManager.Instance.MenuTextUpdate();
 

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cd68a62583a0074085ece26389461f4, type: 3}
+  m_Name: SilverHeadgear
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 8096991026686958896, guid: bd371067f1a8e3b47aca1bcb4c573eb0, type: 3}
+  dropChance: 0
+  itemType: 2
+  waponType: 0
+  isStackable: 0
+  attackPower: 3
+  defensePower: 4
+  attackSpeed: 0
+  Speed: -0.1
+  healthRecovery: 0
+  itemCode: 3303
+  icon: {fileID: 1783341550583703497, guid: f627a9e32f1625e4980219dca43ca1db, type: 3}

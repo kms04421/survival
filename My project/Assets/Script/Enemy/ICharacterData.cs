@@ -5,7 +5,7 @@ namespace MainSSM
     {
         int BaseHp { get; set; }
         float BaseMovementSpeed { get; set; }
-        int BaseAttackPower { get; set; }
+        float BaseAttackPower { get; set; }
 
         int MaxHp { get; set; }
     }

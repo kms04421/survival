@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Audio;
 
 
 namespace MainSSM
@@ -23,6 +24,8 @@ namespace MainSSM
         private float hitCooldown = 1f; // 1초 간격
         public List<ItemData> itemList; // 드랍 아이템 목록
         [HideInInspector]public int spawnIndex = 0;
+        public AudioClip[] audioclips; // 1 . 히트 2. 다이 
+        private AudioSource audioSource;
         private enum EnemyState
         {
             Chase,// 추적
@@ -30,7 +33,8 @@ namespace MainSSM
             Die // 사망
         }
         private void Awake()
-        {           
+        {
+            audioSource = GetComponent<AudioSource>();
             knockbackDelay = new WaitForSeconds(0.2f);
             gamemanager = GameManager.Instance;
             boxCollider = GetComponent<BoxCollider2D>();
@@ -63,10 +67,12 @@ namespace MainSSM
                         Invoke("OnDie", 3); // 시체 3초후 사라지도록
                         DropItems();// 몬스터 사망시 아이템 드롭
                         currentState = EnemyState.Die;
+                        AudioPlay(1);
                     }
                     break;
                 case EnemyState.Hit:
                     StartCoroutine(WaitForKnockback());
+                  
                     break;
                 case EnemyState.Die:
 
@@ -85,6 +91,7 @@ namespace MainSSM
                     rigid.MovePosition(rigid.position + nextVec);
                     break;
                 case EnemyState.Hit:
+                    AudioPlay(0);
                     rigid.linearVelocity = Vector2.zero;
                     break;
 
@@ -99,14 +106,14 @@ namespace MainSSM
             if (currentState == EnemyState.Die || currentState == EnemyState.Hit) return;
             spriteRenderer.flipX = target.position.x < rigid.position.x;
         }
-        public void OnHit(int num)//몬스터 히트 시
+        public void OnHit(float num)//몬스터 히트 시
         {       
             if (currentState == EnemyState.Die) return;
             enemydata.TakeDamage(num);
             animator.SetTrigger("Hit");
             currentState = EnemyState.Hit;
-            /*   Vector2 knockbackDirection = (rigid.position - (Vector2)gamemanager.PlayerPosition.position).normalized;
-               rigid.AddForce(knockbackDirection * 0.3f, ForceMode2D.Impulse);*/ //밀어내는 로직
+          
+
         }
         public void OnEnable()
         {
@@ -118,7 +125,7 @@ namespace MainSSM
             Speed = new Vector2(enemydata.Speed, rigid.linearVelocityY);
             rigid.linearVelocity = Speed;
             boxCollider.isTrigger = false;
-            enemydata.HpSet();
+            enemydata.MonstrRoundDataSet();
             currentState = EnemyState.Chase;
         }
         public void OnDie()//몬스터 사망 시 3초후 제거
@@ -134,6 +141,7 @@ namespace MainSSM
             {
                 rigid.linearVelocity = Speed;
                 currentState = EnemyState.Chase;
+               
             }
 
         }
@@ -175,7 +183,14 @@ namespace MainSSM
                 }
             }
         }
+        private void AudioPlay(int i)
+        {
+            audioSource.clip = audioclips[i];
+            audioSource.Play();
+        }
     }
+
+    
 
 }
 

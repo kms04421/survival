@@ -9,6 +9,8 @@ public class RoundManager : MonoBehaviour
 
     private int baseMonsterHP = 10; // 기본 몬스터 HP
 
+    private int baseMonsterPower = 5; // 기본 몬스터 공격력
+
     private float hpMultiplier = 1.2f; // HP가 증가 비율
 
     public int roundTime = 10; // 스테이지 시간
@@ -23,11 +25,16 @@ public class RoundManager : MonoBehaviour
         currentRound++;
         SetRoundParameters();
         MonsterSpawner.Instance.SpawnMonster(); // 몬스터 스폰
+        
     }
     public int GetMonsterHPForCurrentRound()// 라운드별 몬스터 hp
     {
         return Mathf.FloorToInt(baseMonsterHP * Mathf.Pow(hpMultiplier, currentRound - 1));
     }
 
-    
+    public int GetMonsterPowerForCurrentRound()// 라운드별 몬스터 공격력
+    {
+        return Mathf.FloorToInt(baseMonsterPower * Mathf.Pow(hpMultiplier, currentRound - 1));
+    }
+
 }

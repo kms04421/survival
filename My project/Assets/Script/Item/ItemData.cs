@@ -29,7 +29,7 @@ public enum ItemType
     Weapon,          // 무기
     Headgear,        //머리 방어구
     Armor,           //갑옷 방어구
-    Accessory,       //악세서리
+    Shoes,          //신발
     Artifact,        //아티펙트
     Consumable,      // 소비 아이템
     Ingredient       // 재료아이템

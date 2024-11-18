@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO.Pipes;
+using System.Reflection;
 using UnityEngine;
 namespace MainSSM
 {
@@ -26,7 +27,7 @@ namespace MainSSM
             player = transform.parent.GetComponent<Player>();
             vector2Zero = new Vector2(0, 0);
             targetRotation = Quaternion.Euler(0, 360, 0) * transform.rotation;
-            fireDelay = new WaitForSeconds(0.5f);
+            fireDelay = new WaitForSeconds(5.5f - player.playerData.AdditionalAttackSpeed);
             //5 -(player.playerData.AdditionalAttackSpeed + player.playerData.BaseAttackSpeed)
         }
 
@@ -53,13 +54,14 @@ namespace MainSSM
         private IEnumerator MeleeAttack()
         {
             isAttacking = true;
+         
             speed = player.playerData.AdditionalAttackSpeed + player.playerData.BaseAttackSpeed;
             while (player.rote.x != 0 && player.rote.y != 0)
             {
                 transform.Rotate(new Vector3(0, 0, -speed * 100 * Time.deltaTime));
                 yield return null; // 매 프레임마다 회전하도록 함
+                
             }
-
             isAttacking = false;
             ResetWeaponPosition();
         }
@@ -85,7 +87,7 @@ namespace MainSSM
             }
             return true;
         }
-        public void RangedAttack() // 무기 회전 이동
+        public void RangedAttack() //원거리 공격
         {
             if(!ResetWeaponPosition()) return;
 
@@ -97,6 +99,7 @@ namespace MainSSM
             transform.rotation = Quaternion.Euler(0, 0, angle);
             if (canFire)
             {
+               
                 StartCoroutine(BulletFiring(angle)) ;
             }
         }
@@ -104,7 +107,7 @@ namespace MainSSM
        
         private IEnumerator BulletFiring(float angle)
         {
-         
+            AudioPlay(1);
             canFire = false; // 발사를 잠시 비활성화
             ObjectPoolingManager.Instance.GetBullet(transform.GetChild(0)); // 총알 생성
             yield return fireDelay; // 설정된 시간만큼 대기
@@ -123,11 +126,14 @@ namespace MainSSM
         public void WeaponChange(Slot slot) // 무기 교체시 하단 무기 이미지 교체
         {         
             if (slot.itemData != null)
-            {
+            {              
+                if(slot.itemData.itemType == ItemType.HealthPotion) return;
+                
                 TypeChange(slot.itemData.waponType);
                 int weaponIndex = (int)slot.itemData.waponType;
                 SetActiveObject(weaponIndex);
                 equippedWeaponList[weaponIndex].GetComponent<CollisionNotifier>().SetImage(slot.itemData);
+                fireDelay = new WaitForSeconds(5.5f - player.playerData.AdditionalAttackSpeed);
             }
             else
             {
@@ -156,7 +162,10 @@ namespace MainSSM
         {
             currentType = _waponType;
         }
-
+        public void AudioPlay(int index)
+        {
+            AudioManager.Instance.EffectsSourcePlay(index);
+        }
     }
 
 

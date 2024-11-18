@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cd68a62583a0074085ece26389461f4, type: 3}
+  m_Name: GreenMold
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 3208465683946098823, guid: c63699165d3f8e444aa86ab0765a3477, type: 3}
+  dropChance: 0.447
+  itemType: 7
+  waponType: 0
+  isStackable: 0
+  attackPower: 0
+  defensePower: 0
+  attackSpeed: 0
+  Speed: 0
+  healthRecovery: 0
+  itemCode: 13
+  icon: {fileID: -9011158272753637213, guid: f627a9e32f1625e4980219dca43ca1db, type: 3}

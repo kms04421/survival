@@ -3,7 +3,7 @@ namespace MainSSM
 {
     public interface IHitListener
     {
-        public void OnHit(int num);
+        public void OnHit(float num);
        
     }
 }

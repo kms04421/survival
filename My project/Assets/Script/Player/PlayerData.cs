@@ -4,15 +4,15 @@ public class PlayerData : ICharacterData
 {
     public int BaseHp { get; set; }
     public float BaseMovementSpeed { get; set; }
-    public int BaseAttackPower { get; set; } // 공격력
+    public float BaseAttackPower { get; set; } // 공격력
     public int MaxHp { get; set; } // 최대hp
-    public int BaseDefensePower {  get; set; } // 방어력
+    public float BaseDefensePower {  get; set; } // 방어력
     public float BaseAttackSpeed {  get; set; } // 공격속도
 
   
-    public int AdditionalAttackPower = 0;   // 추가 공격력
+    public float AdditionalAttackPower = 0;   // 추가 공격력
  
-    public int AdditionalDefensePower = 0;  // 추가 방어력
+    public float AdditionalDefensePower = 0;  // 추가 방어력
 
     public float AdditionalAttackSpeed = 0; // 추가 공격 속도
     
@@ -28,19 +28,12 @@ public class PlayerData : ICharacterData
         BaseAttackSpeed = _aps;
         MaxHp = _hp;
     }
-    public void AddMaxHP(int num)
+    public void TakeDamage(float amount) //hp 데미지 적용
     {
-        MaxHp += num;
-    }
-    public void MinMaxHP(int num)
-    {
-        MaxHp -= num;
-    }
-    public void TakeDamage(int amount) //hp 데미지 적용
-    {
-        if (amount < BaseDefensePower) return;
+        if (amount < (BaseDefensePower + AdditionalDefensePower)) return;
         
-        BaseHp -= amount - BaseDefensePower;
+        BaseHp -= (int)amount - (int)(BaseDefensePower+ AdditionalDefensePower);
+
     }
     public void Heal(int amount) // 체력 회복
     {
@@ -52,41 +45,30 @@ public class PlayerData : ICharacterData
         {
             BaseHp += amount;
         }
+        UIManager.Instance.HpBarSet();
     }
     // baseStateUP
-    public void BaseAttackPowerUP(int amount) //데미지업
+    public void ModifyBaseStat(int stateNumber, float amount)
     {
-        BaseAttackPower += amount;
+        switch (stateNumber)
+        {
+            case 1:
+                BaseAttackPower += amount;
+                break;
+            case 2:
+                BaseAttackSpeed += amount;
+                break;
+            case 3:
+                BaseDefensePower += amount;             
+                break;
+            case 4:
+                BaseMovementSpeed += amount;
+                break;
+            case 5:
+                MaxHp += (int)amount;
+                break;
+        }
     }
-    public void BaseAttackPowerDown(int amount) //데미지 다운
-    {
-        BaseAttackPower -= amount;
-    }
-    public void BaseAttackSpeedUP(float amount) // 공속업
-    {
-        BaseAttackSpeed += amount;
-    }
-    public void BaseAttackSpeedDown(float amount) // 공속 다운
-    {
-        BaseAttackSpeed -= amount;
-    }
-    public void BaseDefensePowerUp(int amount)//방어력업
-    {
-        BaseDefensePower += amount;
-    }
-    public void BaseDefensePowerDown(int amount)//방어력다운
-    {
-        BaseDefensePower -= amount;
-    }
-    public void BaseMovementSpeedUp(float amount)//스피드업
-    {
-        BaseMovementSpeed += amount;
-    }
-    public void BaseMovementSpeedDown(float amount)//스피드 다운
-    {
-        BaseMovementSpeed -= amount;
-    }
-    // baseStateUP
 
 
     // AddStateUp

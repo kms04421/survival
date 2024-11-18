@@ -13,12 +13,16 @@ namespace MainSSM
         [HideInInspector]public int monstersKilled = 0;
 
         public List<GameObject> initialObjects;
+
+        private RandomStateUi randomStateUi;
         private void Awake()
-        {          
+        {
+            randomStateUi = FindAnyObjectByType<RandomStateUi>();   
             roundManager = new RoundManager();
             PlayerPosition = GameObject.Find("Player").transform;
             roundManager.SetRoundParameters();// 시작시 몬스터 수량을 위해 추가
             InitializeObjects();
+            Time.timeScale = 0f;//게임 일시정지
         }
 
        
@@ -29,6 +33,8 @@ namespace MainSSM
             UIManager.Instance.monsterTotalAmount.text = (roundManager.EnemyCount - monstersKilled).ToString();
             if (monstersKilled == roundManager.EnemyCount)
             {
+                randomStateUi.SetRandomState();
+                AudioManager.Instance.BackGroundAudioPlay(1);
                 UIManager.Instance.ActivateTimer();
                 monstersKilled = 0;
             }
@@ -52,6 +58,11 @@ namespace MainSSM
         {
             // 현재 씬 다시 로드
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void StartGame()
+        {
+            Time.timeScale = 1f;
         }
     }
 }

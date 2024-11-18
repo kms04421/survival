@@ -86,6 +86,7 @@ namespace MainSSM
                 case PlayerState.Die:
                     animator.SetTrigger("Dead");
                     UIManager.Instance.GameOver();
+                    AudioManager.Instance.BackGroundAudioPlay(2);
                     weapoon.SetActive(false);
                     rigid.bodyType = RigidbodyType2D.Kinematic;
                     break;
@@ -110,11 +111,11 @@ namespace MainSSM
 
     
 
-        public void OnHit(int dam) // IHitListener히트용 인터페이스 몬스터 플레이어 적용 히트시 작동
+        public void OnHit(float dam) // IHitListener히트용 인터페이스 몬스터 플레이어 적용 히트시 작동
         {
             if (currentState == PlayerState.Die) return;
             playerData.TakeDamage(dam);
-            UIManager.Instance.HpBarSet(playerData);
+            UIManager.Instance.HpBarSet();
             if (playerData.BaseHp <= 0)
             {
                 currentState = PlayerState.Die;

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cd68a62583a0074085ece26389461f4, type: 3}
-  m_Name: Shovel
+  m_Name: ColaArmor
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 5158071614677588876, guid: b13bc61d053543d4f9c1abe41d33f59e, type: 3}
+  itemPrefab: {fileID: 6899409974596747031, guid: a1eb994e70bb7fa42824b61693df7ee4, type: 3}
   dropChance: 0
-  itemType: 1
+  itemType: 3
   waponType: 0
   isStackable: 0
-  attackPower: 5
-  defensePower: 0
-  attackSpeed: 0.3
-  Speed: 0
+  attackPower: 2
+  defensePower: 4
+  attackSpeed: 0
+  Speed: -0.1
   healthRecovery: 0
-  itemCode: 2040
-  icon: {fileID: -1566552537, guid: b7ca5692d77a23f4bbfa9d9188c01f75, type: 3}
+  itemCode: 1111
+  icon: {fileID: -6522757070750181056, guid: f627a9e32f1625e4980219dca43ca1db, type: 3}

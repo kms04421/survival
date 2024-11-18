@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cd68a62583a0074085ece26389461f4, type: 3}
-  m_Name: Silver
+  m_Name: SilverShoes
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 5665076283079982086, guid: 0d509d7e6c594ca41973994e8097cb9b, type: 3}
-  dropChance: 0.444
-  itemType: 7
+  itemPrefab: {fileID: 871949860730683143, guid: 7febc0c139cf3bd4ea3ae0c00c7fdf4a, type: 3}
+  dropChance: 0
+  itemType: 4
   waponType: 0
-  isStackable: 1
-  attackPower: 0
-  defensePower: 0
+  isStackable: 0
+  attackPower: 3
+  defensePower: 5
   attackSpeed: 0
-  Speed: 0
+  Speed: 0.5
   healthRecovery: 0
-  itemCode: 3
-  icon: {fileID: 1419007076, guid: b7ca5692d77a23f4bbfa9d9188c01f75, type: 3}
+  itemCode: 0333
+  icon: {fileID: -7776774514655943377, guid: f627a9e32f1625e4980219dca43ca1db, type: 3}

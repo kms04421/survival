@@ -10,9 +10,9 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     [HideInInspector] public int quantity = 0;
     public ItemData itemData;
     [SerializeField] private SlotType slotType;
+    public ItemType itemType;
     public UnityEvent OnSwapEvent;
     public UnityEvent OnDropEvent;
-
     public void Start()
     {
         SetSlot(itemData);
@@ -31,11 +31,12 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         result,
         Inventory
     }
-
+   
     public void OnBeginDrag(PointerEventData eventData)
     {
 
         if (itemData == null) { return; }
+        SelectAudioPlay(2);
         UIManager.Instance.dragSlot.slot = this;
         UIManager.Instance.dragSlot.DragSetImage(image);
     }
@@ -51,11 +52,11 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     public void OnDrop(PointerEventData eventData)
     {
         Slot droppedSlot = eventData.pointerDrag.GetComponent<Slot>();
-        if (droppedSlot == null) return;
+        if (droppedSlot.itemData == null) return;
         switch (slotType)
         {
             case SlotType.Equipment:
-                if (droppedSlot.itemData.itemType != ItemType.Weapon) return;
+                if (itemType != droppedSlot.itemData.itemType) return;
 
                 SwapItems(droppedSlot);// 아이템 스왑
                 DropEvent();
@@ -211,5 +212,9 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         {
             Init();
         }
+    }
+    public void SelectAudioPlay(int index)
+    {
+        AudioManager.Instance.EffectsSourcePlay(index);
     }
 }
