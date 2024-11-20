@@ -29,6 +29,7 @@ namespace MainSSM
                         break;
                     case ItemType.HealthPotion:
                         player.playerData.Heal(slot.itemData.healthRecovery);
+                        UIManager.Instance.HpBarSet();
                         slot.DecCountQuantity(1);
                         break;
                 }

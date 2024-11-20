@@ -44,8 +44,7 @@ public class PlayerData : ICharacterData
         else
         {
             BaseHp += amount;
-        }
-        UIManager.Instance.HpBarSet();
+        }      
     }
     // baseStateUP
     public void ModifyBaseStat(int stateNumber, float amount)

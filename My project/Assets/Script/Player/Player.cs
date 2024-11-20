@@ -6,25 +6,19 @@ namespace MainSSM
 {
     public class Player : MonoBehaviour, IHitListener
     {
-        public FloatingJoystick movejoy;
-        public FloatingJoystick rotejoy;
+        public FloatingJoystick movejoy;//움직임 조이스틱
+        public FloatingJoystick rotejoy;//무기 조이스틱
 
-        private GameObject weapoon; // 무기 
-        
-        [HideInInspector] public WeaponController weaponController; // 무기 컨트롤러
-
-        [HideInInspector]public SpriteRenderer spriteRenderer; // 플레이어 sprite
         private Animator animator;  //플레이어 에니메이터
         private Rigidbody2D rigid; //플레이어 rigdboy
         private Vector2 movement; //움지임 저장용 xy
+        private GameObject weapoon; // 무기    
+        [HideInInspector]public WeaponController weaponController; // 무기 컨트롤러
+        [HideInInspector]public SpriteRenderer spriteRenderer; // 플레이어 sprite
         [HideInInspector]public Vector2 rote; // 플레이어 무기 회전각 저장용 xy
         float isMoving = 0; //에니메이션 속도 용
 
-    
-
         private Inventory inventory; // 인벤토리
-      
-
 
         public PlayerData playerData;
         private PlayerState currentState; // 현재 상태
@@ -37,13 +31,10 @@ namespace MainSSM
         // Start is called before the first frame update
         void Awake()
         {
+            playerData = new PlayerData(100, 3.5f, 100,1,2.5f);         
             weapoon = transform.Find("Weapon").gameObject;
-            weaponController = weapoon.GetComponent<WeaponController>();
-           
-            playerData = new PlayerData(100, 3.5f, 100,1,2.5f);
-          
+            weaponController = weapoon.GetComponent<WeaponController>();          
             spriteRenderer = GetComponent<SpriteRenderer>();
-
             animator = GetComponent<Animator>();
             rigid = GetComponent<Rigidbody2D>();
             inventory = GetComponent<Inventory>();

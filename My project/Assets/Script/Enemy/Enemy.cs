@@ -26,6 +26,7 @@ namespace MainSSM
         [HideInInspector]public int spawnIndex = 0;
         public AudioClip[] audioclips; // 1 . 히트 2. 다이 
         private AudioSource audioSource;
+        private IHitListener cachedHitListener; // IHitListener 캐싱용
         private enum EnemyState
         {
             Chase,// 추적
@@ -132,7 +133,7 @@ namespace MainSSM
         {
             gameObject.SetActive(false);
 
-            MonsterSpawner.Instance.EnqueueMonster(gameObject , spawnIndex);
+            EnemySpawner.Instance.EnqueueMonster(gameObject , spawnIndex);
         }
         IEnumerator WaitForKnockback() // 몬스터 경직
         {
@@ -174,12 +175,16 @@ namespace MainSSM
             if (currentState == EnemyState.Die) return;
             if (collision.collider.gameObject.layer == 9)
             {
+                if(cachedHitListener == null)
+                {
+                    cachedHitListener = collision.collider.GetComponent<IHitListener>();
+                }
                 if (Time.time - lastHitTime >= hitCooldown)
                 {
-                    collision.collider.GetComponent<IHitListener>().OnHit(enemydata.Damage);
+                    cachedHitListener.OnHit(enemydata.Damage);
 
-                    // 마지막 피격 시간 갱신
-                    lastHitTime = Time.time;
+                    lastHitTime = Time.time;// 마지막 피격 시간 갱신
+
                 }
             }
         }

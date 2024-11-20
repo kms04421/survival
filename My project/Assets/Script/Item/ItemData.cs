@@ -3,12 +3,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewItem", menuName = "Item/ItemData")]
 public class ItemData : ScriptableObject
 {
-    public GameObject itemPrefab;  // 아이템 프리팹
+    public GameObject itemPrefab;    // 아이템 프리팹
     [Range(0, 1)]
-    public float dropChance;       // 아이템 드롭 확률 (0 ~ 1)
+    public float dropChance;         // 아이템 드롭 확률 (0 ~ 1)
 
-    public ItemType itemType; // 아이템 종류
-    public WeaponType waponType;      // 근거리 원거리 타입
+    public ItemType itemType;        // 아이템 종류
+    public WeaponType waponType;     // 근거리 원거리 타입
 
     public bool isStackable;         // 아이템이 쌓일 수 있는지 여부
 
@@ -17,7 +17,6 @@ public class ItemData : ScriptableObject
     public float attackSpeed;        // 공격 속도
     public float Speed;              // 이동 속도
     public int healthRecovery;       // 체력 회복량
-
 
     public string itemCode; // 조합시 사용할 아이템 코드
 

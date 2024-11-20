@@ -24,7 +24,7 @@ public class RoundManager : MonoBehaviour
       
         currentRound++;
         SetRoundParameters();
-        MonsterSpawner.Instance.SpawnMonster(); // 몬스터 스폰
+        EnemySpawner.Instance.SpawnMonster(); // 몬스터 스폰
         
     }
     public int GetMonsterHPForCurrentRound()// 라운드별 몬스터 hp

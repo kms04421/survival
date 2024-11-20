@@ -5,27 +5,26 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UIManager : SingletonBehaviour<UIManager>
 {
-    public Slider timeBar;
-    public WaitForSeconds waitForSeconds;
-    public delegate void TimeEndEvet(); // 타이머 종료시 함수들 담는용
-    public TimeEndEvet timeEndEvet; // 타이머 종료시 함수들 담는용
-    public Slider playerHPBar;
     public TextMeshProUGUI day;
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI atkText;
     public TextMeshProUGUI dfsText;
     public TextMeshProUGUI apsText;
     public TextMeshProUGUI monsterTotalAmount;
-    public DragSlot dragSlot;
-    public PlayerData playerData;
-    public GameObject deadUI;
+
+    public Slider timeBar; // 타이머바
+    public WaitForSeconds waitForSeconds; //코루틴 WaitForSeconds를 사전캐싱용
+    public delegate void TimeEndEvet(); // 타이머 종료시 함수들 담는용
+    public TimeEndEvet timeEndEvet; // 타이머 종료시 함수들 담는용
+    public Slider playerHPBar; // 플레이어 체력바
+    public DragSlot dragSlot; // 아이템 드래그 슬롯
+    public PlayerData playerData; //플레이어 데이터 
+    public GameObject deadUI; // 사망시 출력 ui 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
         waitForSeconds = new WaitForSeconds(0.01f);
         ADDtimeEndEvet();
-
-
 
     }
     private void Start()

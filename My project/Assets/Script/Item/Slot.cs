@@ -19,8 +19,12 @@ public class Slot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     }
     private void OnEnable()
     {
-        image = transform.GetChild(0).GetComponent<Image>();
-        quantityText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        if(image == null || quantityText == null)
+        {
+            image = transform.GetChild(0).GetComponent<Image>();
+            quantityText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        }
+      
         
     }
 

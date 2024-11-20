@@ -4,44 +4,44 @@ using System.Text;
 using UnityEngine;
 public class Inventory : SingletonBehaviour<Inventory>
 {
-    [HideInInspector] public Slot[] slots;
-    [HideInInspector] public Slot[] mixture;
-
-    private Dictionary<string, int> itemCounts;
+    [HideInInspector] public Slot[] slots; // 인벤토리 슬롯
+    [HideInInspector] public Slot[] mixture; // 조합슬롯
+    const int RESULT_SLOT_INDEX = 4; //resultSlot Index
     public GameObject invnetoryObj; //인베토리 ui
     public GameObject mixtureObj;   //조합 ui
     public GameObject selectObj;    //선택 ui
     public List<ItemData> mixitemList;//조합 아이템 리스트 
+    private Dictionary<string, int> itemCounts; //조합시필요한 아이템 카운팅용
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        itemCounts = new Dictionary<string, int>();
+        itemCounts = new Dictionary<string, int>(5);
         SetArray(ref slots, invnetoryObj); // 인벤토리 배열
         SetArray(ref mixture, mixtureObj); // 조합배열
-        AddArray(ref slots, selectObj);
+        AddArray(ref slots, selectObj); // 배열에 추가 등록
 
     }
 
-    public void SetArray(ref Slot[] array, GameObject tragetObj)//타겟오브젝트 배열에 저장
+    public void SetArray(ref Slot[] array, GameObject targetObj)//타겟오브젝트 배열에 저장
     {
-        int size = tragetObj.transform.childCount;
+        int size = targetObj.transform.childCount;
         array = new Slot[size];
         for (int i = 0; i < size; i++)
         {
-            Transform invnetoryObjtransform = tragetObj.transform.GetChild(i);
-            array[i] = invnetoryObjtransform.GetComponent<Slot>();
+            Transform childTransform = targetObj.transform.GetChild(i);
+            array[i] = childTransform.GetComponent<Slot>();
         }
     }
     public void AddArray(ref Slot[] array, GameObject tragetObj)//배열에 원하는 오브젝트 solt 추가
     {
-        Slot[] copy = new Slot[array.Length + (tragetObj.transform.childCount-1)];
+        Slot[] copy = new Slot[array.Length + (tragetObj.transform.childCount)];
         int AddIndex = 0; //추가할 오브젝트 카운트
         array.CopyTo(copy, 0);
         for (int i = array.Length-1; i < copy.Length; i++)
         {
-            Transform Objtransform = tragetObj.transform.GetChild(AddIndex);
+            Transform childTransform = tragetObj.transform.GetChild(AddIndex);
            
-            copy[i] = Objtransform.GetComponent<Slot>();
+            copy[i] = childTransform.GetComponent<Slot>();
             AddIndex ++;    
         }
         array = new Slot[copy.Length];
@@ -164,7 +164,7 @@ public class Inventory : SingletonBehaviour<Inventory>
                 return;
             }
         }
-        mixture[4].Init();
+        mixture[RESULT_SLOT_INDEX].Init();
     }
    
 

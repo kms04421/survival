@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace MainSSM
 {
-    public class MonsterSpawner : SingletonBehaviour<MonsterSpawner>
+    public class EnemySpawner : SingletonBehaviour<EnemySpawner>
     {
-        private static MonsterSpawner instance; 
         [HideInInspector]public Transform player;    // 플레이어의 Transform
-        public List<GameObject> monsterPrefabs;
         [HideInInspector]public float monsterSPMinRadius = 10f;   // 최소 소환 범위
         [HideInInspector]public float monsterSPMaxRadius = 15f;  // 최대 소환 범위
         private GameManager gameManager;//게임메니저 싱글톤 GameManager.Instance; 저장용
+        public List<GameObject> monsterPrefabs; //몬스터 프리팹 리스트로 저장
         private List<Queue<GameObject>> MonsterQueue; //몬스터 프리팹을 큐 리스트로 저장 오브젝트 풀링용 이유 : 여러 마리의 몬스터를 종류별로 소환하기 위해 
         WaitForSeconds forSeconds;
       

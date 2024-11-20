@@ -6,9 +6,9 @@ using UnityEngine;
 public class ObjectPoolingManager : SingletonBehaviour<ObjectPoolingManager>
 {
     public ItemData[] itemDataArray;
-    public GameObject bullctPrefap;
     public Dictionary<string, Queue<GameObject>> itemPool;  // 아이템 풀
     public Queue<GameObject> bulletPool; //  
+    public GameObject bullctPrefap;
     public Transform items;
     public Transform bullets;
 

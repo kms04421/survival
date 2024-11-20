@@ -16,27 +16,19 @@ namespace MainSSM
 
         private void LoadEnemiesFromJSON()
         {
-            // Resources 폴더에서 JSON 파일 로드 (예: Resources/Enemies/enemyData.json)
             TextAsset jsonFile = Resources.Load<TextAsset>("enemyData");
             if (jsonFile == null)
             {
-                Debug.LogError("JSON 파일이 존재하지 않습니다.");
+                Debug.LogError("json없음");
                 return;
-            }
-         
-            // JSON 파일을 파싱하여 직접 List<Enemy>로 변환
-            EnemyListWrapper wrapper = JsonUtility.FromJson<EnemyListWrapper>(jsonFile.text);
-
-            foreach(EnemyData data in wrapper.EnemyList)
+            }     
+            EnemyListWrapper wrapper = JsonUtility.FromJson<EnemyListWrapper>(jsonFile.text); // JSON 파일을 파싱하여 List<Enemy>로 변환
+            foreach (EnemyData data in wrapper.EnemyList)
             {
                 enemies.Add(data.name, data);
             }
 
-
         }
-
-
-        // Enemy 목록을 래핑하는 클래스
         [System.Serializable]
         public class EnemyListWrapper
         {
